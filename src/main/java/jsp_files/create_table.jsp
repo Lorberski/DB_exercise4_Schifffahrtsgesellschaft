@@ -4,25 +4,36 @@
 
 <!-- Datenquelle definieren -->
 <sql:setDataSource
-    driver="oracle.jdbc.driver.OracleDriver"
-    url="jdbc:oracle:thin:@localhost:1521/xepdb1"
-    user="csdc26vz_04"
-    password="noo2toh5Ot"
-    var="ds"
+        driver="oracle.jdbc.driver.OracleDriver"
+        url="jdbc:oracle:thin:@localhost:1521/xepdb1"
+        user="csdc26vz_04"
+        password="noo2toh5Ot"
+        var="ds"
 />
 
-<!-- Tabelle PERSON erstellen -->
+<!-- Tabelle Person erstellen -->
 <sql:update dataSource="${ds}">
     CREATE TABLE Person (
-        SVNR VARCHAR2(11) PRIMARY KEY,
-        Vorname VARCHAR2(50) NOT NULL,
-        Nachname VARCHAR2(50) NOT NULL,
-        Ort VARCHAR2(100),
-        Strasse VARCHAR2(100),
-        Postleitzahl VARCHAR2(10),
-        Hausnummer VARCHAR2(10)
+    SVNR VARCHAR2(11) PRIMARY KEY,
+    Vorname VARCHAR2(50) NOT NULL,
+    Nachname VARCHAR2(50) NOT NULL,
+    Ort VARCHAR2(100),
+    Strasse VARCHAR2(100),
+    Postleitzahl VARCHAR2(10),
+    Hausnummer VARCHAR2(10)
+    )
+</sql:update>
+
+<!-- Tabelle Telefonnummer erstellen -->
+<sql:update dataSource="${ds}">
+    CREATE TABLE Telefonnummer (
+    SV_Nummer     VARCHAR2(50) NOT NULL,
+    Telefonnummer VARCHAR2(30) NOT NULL,
+
+    PRIMARY KEY (SV_Nummer, Telefonnummer),
+    FOREIGN KEY (SV_Nummer) REFERENCES Person(SVNR)
     )
 </sql:update>
 
 
-<p>CREATE TABLE successful!</p>
+<p>Tabellen wurden erfolgreich erstellt!</p>
