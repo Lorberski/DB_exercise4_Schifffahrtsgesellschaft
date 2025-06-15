@@ -4,16 +4,33 @@
 
 <!-- Datenquelle definieren -->
 <sql:setDataSource
-        driver="oracle.jdbc.driver.OracleDriver"
-        url="jdbc:oracle:thin:@localhost:1521/xepdb1"
-        user="csdc26vz_04"
-        password="noo2toh5Ot"
-        var="ds"
+    driver="oracle.jdbc.driver.OracleDriver"
+    url="jdbc:oracle:thin:@localhost:1521/xepdb1"
+    user="csdc26vz_04"
+    password="noo2toh5Ot"
+    var="ds"
 />
 
 <sql:update dataSource="${ds}">
-    DROP TABLE PERSON
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE Telefonnummer';
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -942 THEN
+                RAISE;
+            END IF;
+    END;
 </sql:update>
 
+<sql:update dataSource="${ds}">
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE Person';
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -942 THEN
+                RAISE;
+            END IF;
+    END;
+</sql:update>
 
 <p>DROP TABLE successful!</p>

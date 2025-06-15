@@ -14,7 +14,7 @@
 <!-- Tabelle Person erstellen -->
 <sql:update dataSource="${ds}">
     CREATE TABLE Person (
-    SVNR VARCHAR2(11) PRIMARY KEY,
+    SV_Nummer VARCHAR2(11) PRIMARY KEY,
     Vorname VARCHAR2(50) NOT NULL,
     Nachname VARCHAR2(50) NOT NULL,
     Ort VARCHAR2(100),
@@ -27,13 +27,26 @@
 <!-- Tabelle Telefonnummer erstellen -->
 <sql:update dataSource="${ds}">
     CREATE TABLE Telefonnummer (
-    SV_Nummer     VARCHAR2(50) NOT NULL,
+    SV_Nummer     VARCHAR2(11) NOT NULL,
     Telefonnummer VARCHAR2(30) NOT NULL,
 
     PRIMARY KEY (SV_Nummer, Telefonnummer),
     FOREIGN KEY (SV_Nummer) REFERENCES Person(SVNR)
     )
 </sql:update>
+
+
+
+<!-- Tabelle Passagier erstellen -->
+<sql:update dataSource="${ds}">
+    CRETE TABLE Passagier (
+    SV_Nummer VARCHAR2(11) PRIMARY KEY,
+    Passagier_Nummer INT NOT NULL,
+
+    FOREIGN KEY (SV_Nummer) REFERENCES Person(SV_Nummer)
+    )
+</sql:update>
+
 
 
 <p>Tabellen wurden erfolgreich erstellt!</p>
