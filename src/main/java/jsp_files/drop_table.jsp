@@ -14,6 +14,17 @@
 
 <sql:update dataSource="${ds}">
     BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE Kapitaen';
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -942 THEN
+                RAISE;
+            END IF;
+    END;
+</sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN
         EXECUTE IMMEDIATE 'DROP TABLE Angestellter';
     EXCEPTION
         WHEN OTHERS THEN

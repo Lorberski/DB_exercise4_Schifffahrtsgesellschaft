@@ -69,4 +69,15 @@
     )
 </sql:update>
 
+<!-- Tabelle Kapitaen erstellen -->
+<sql:update dataSource="${ds}">
+    CREATE TABLE Kapitaen (
+    SV_Nummer VARCHAR2(11) PRIMARY KEY,
+    Kapitaenspatent VARCHAR2(11) NOT NULL,
+    Seemeilen NUMBER(12, 2),
+
+    FOREIGN KEY (SV_Nummer) REFERENCES Person(SV_Nummer)
+    )
+</sql:update>
+
 <p>Tabellen wurden erfolgreich erstellt!</p>
