@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -31,7 +32,7 @@
     Telefonnummer VARCHAR2(30) NOT NULL,
 
     PRIMARY KEY (SV_Nummer, Telefonnummer),
-    FOREIGN KEY (SV_Nummer) REFERENCES Person(SVNR)
+    FOREIGN KEY (SV_Nummer) REFERENCES Person(SV_Nummer)
     )
 </sql:update>
 
@@ -39,7 +40,7 @@
 
 <!-- Tabelle Passagier erstellen -->
 <sql:update dataSource="${ds}">
-    CRETE TABLE Passagier (
+    CREATE TABLE Passagier (
     SV_Nummer VARCHAR2(11) PRIMARY KEY,
     Passagier_Nummer INT NOT NULL,
 
