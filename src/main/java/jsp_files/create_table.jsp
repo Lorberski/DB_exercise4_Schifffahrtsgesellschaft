@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -36,8 +35,6 @@
     )
 </sql:update>
 
-
-
 <!-- Tabelle Passagier erstellen -->
 <sql:update dataSource="${ds}">
     CREATE TABLE Passagier (
@@ -49,5 +46,27 @@
 </sql:update>
 
 
+<!-- Tabelle Bank erstellen -->
+<sql:update dataSource="${ds}">
+    CREATE TABLE Bank (
+    Bankleitzahl INT PRIMARY KEY,
+    Bankname VARCHAR2(30) NOT NULL
+    )
+</sql:update>
+
+<!-- Tabelle Angestellter erstellen -->
+<sql:update dataSource="${ds}">
+    CREATE TABLE Angestellter (
+    SV_Nummer VARCHAR2(11) PRIMARY KEY,
+    Angestellten_Nr INT NOT NULL,
+    Konto_Nr INT NOT NULL,
+    Bankleitzahl INT NOT NULL,
+    Kontostand NUMBER(12, 2),
+
+    FOREIGN KEY (SV_Nummer) REFERENCES Person(SV_Nummer),
+    FOREIGN KEY (Bankleitzahl) REFERENCES Bank(Bankleitzahl),
+    UNIQUE (Konto_Nr, Bankleitzahl)
+    )
+</sql:update>
 
 <p>Tabellen wurden erfolgreich erstellt!</p>

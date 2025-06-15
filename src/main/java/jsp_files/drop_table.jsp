@@ -11,6 +11,18 @@
     var="ds"
 />
 
+
+<sql:update dataSource="${ds}">
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE Angestellter';
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -942 THEN
+                RAISE;
+            END IF;
+    END;
+</sql:update>
+
 <sql:update dataSource="${ds}">
     BEGIN
         EXECUTE IMMEDIATE 'DROP TABLE Telefonnummer';
@@ -36,6 +48,17 @@
 <sql:update dataSource="${ds}">
     BEGIN
         EXECUTE IMMEDIATE 'DROP TABLE Person';
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -942 THEN
+                RAISE;
+            END IF;
+    END;
+</sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE Bank';
     EXCEPTION
         WHEN OTHERS THEN
             IF SQLCODE != -942 THEN
