@@ -55,4 +55,15 @@
     VALUES ('12345678901', 'KPT001', 12000)
 </sql:update>
 
+<!-- Beispiel: Hersteller hinzufügen -->
+<sql:update dataSource="${ds}">
+    INSERT INTO Hersteller (Herstellername) VALUES ('Maersk Shipyards')
+</sql:update>
+
+<!-- Beispiel: Schiffstyp hinzufügen -->
+<sql:update dataSource="${ds}">
+    INSERT INTO Schiff_Typ (Typennummer, Typenbezeichnung, Bruttoregistertonnen, Besatzungsstaerke, Hersteller)
+    VALUES (101, 'Containerschiff', 50000, 20, 'Maersk Shipyards')
+</sql:update>
+
 <p>FILL TABLE successful!</p>

@@ -115,10 +115,11 @@ FOREIGN KEY (wartet_Schiff_Typ) REFERENCES Schiff_Typ(Typennummer)
 <!-- Tabelle Passage erstellen -->
 <sql:update dataSource="${ds}">
 CREATE TABLE Passage (
-Passage_Nr INT PRIMARY KEY,
+Passagen_Nr INT PRIMARY KEY,
 Abfahrtshafen VARCHAR2(50),
 Zielhafen VARCHAR2(50),
-Abfahrtszeit Date
+Abfahrtszeit Date,
+Ankunftszeit Date
 )
 </sql:update>
 
@@ -131,7 +132,7 @@ Buchungsdatum DATE,
 Passagen_Nr INT NOT NULL,
 Passagier_Nr INT NOT NULL,
 
-FOREIGN KEY (Passagen_Nr) REFERENCES Passage(Passage_Nr),
+FOREIGN KEY (Passagen_Nr) REFERENCES Passage(Passagen_Nr),
 FOREIGN KEY (Passagier_Nr) REFERENCES Passagier(Passagier_Nr)
 )
 </sql:update>
@@ -156,8 +157,8 @@ abhaengige_Passage INT NOT NULL,
 vorausgesetzte_Passage INT NOT NULL,
 
 PRIMARY KEY (abhaengige_Passage, vorausgesetzte_Passage),
-FOREIGN KEY (abhaengige_Passage) REFERENCES Passage(Passage_Nr),
-FOREIGN KEY (vorausgesetzte_Passage) REFERENCES Passage(Passage_Nr)
+FOREIGN KEY (abhaengige_Passage) REFERENCES Passage(Passagen_Nr),
+FOREIGN KEY (vorausgesetzte_Passage) REFERENCES Passage(Passagen_Nr)
 )
 </sql:update>
 
@@ -172,4 +173,17 @@ FOREIGN KEY (SV_Nr) REFERENCES Angestellter(SV_Nr)
 )
 </sql:update>
 
+
+<!-- Tabelle Fahren erstellen -->
+<sql:update dataSource="${ds}">
+    CREATE TABLE Fahren (
+    SV_Nr VARCHAR2(11),
+    Passagen_Nr INT,
+    Typennummer INT,
+
+    FOREIGN KEY (Passagen_Nr) REFERENCES Passage(Passagen_Nr),
+    FOREIGN KEY (SV_Nr) REFERENCES Kapitaen(SV_Nr),
+    FOREIGN KEY (Typennummer) REFERENCES Schiff_Typ(Typennummer)
+    )
+</sql:update>
 <p>Tabellen wurden erfolgreich erstellt!</p>

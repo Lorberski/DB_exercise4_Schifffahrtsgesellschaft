@@ -66,8 +66,12 @@
     <c:if test="${not empty param.passagennummer and not empty param.abfahrtshafen and not empty param.zielhafen and not empty param.abfahrtszeit and not empty param.ankunftszeit and not empty param.typennummer}">
         <!-- Einfügen in die Tabelle PASSAGE -->
         <sql:update dataSource="${ds}" var="updatePassage">
-            INSERT INTO PASSAGE (PASSAGENNUMMER, ABFAHRTSHAFEN, ZIELHAFEN, ABFAHRTSZEIT, ANKUNFTSZEIT)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO PASSAGE (PASSAGEN_NR, ABFAHRTSHAFEN, ZIELHAFEN, ABFAHRTSZEIT, ANKUNFTSZEIT)
+            VALUES (
+            ?, ?, ?,
+            TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'),
+            TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS')
+            )
             <sql:param value="${param.passagennummer}" />
             <sql:param value="${param.abfahrtshafen}" />
             <sql:param value="${param.zielhafen}" />
@@ -79,7 +83,7 @@
             <c:when test="${updatePassage >= 1}">
                 <!-- Automatisches Einfügen in die Tabelle FAHREN -->
                 <sql:update dataSource="${ds}" var="updateFahren">
-                    INSERT INTO FAHREN (SVNR, PASSAGENNUMMER, TYPENNUMMER)
+                    INSERT INTO FAHREN (SV_NR, PASSAGEN_NR, TYPENNUMMER)
                     VALUES (?, ?, ?)
                     <sql:param value="${sessionScope.angestellten_nr}" />
                     <sql:param value="${param.passagennummer}" />
