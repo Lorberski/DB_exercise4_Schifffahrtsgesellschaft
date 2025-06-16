@@ -14,7 +14,7 @@
 <!-- Tabelle Person erstellen -->
 <sql:update dataSource="${ds}">
     CREATE TABLE Person (
-    SVNR VARCHAR2(11) PRIMARY KEY,
+    SV_Nr VARCHAR2(11) PRIMARY KEY,
     Vorname VARCHAR2(50) NOT NULL,
     Nachname VARCHAR2(50) NOT NULL,
     Ort VARCHAR2(100),
@@ -27,13 +27,57 @@
 <!-- Tabelle Telefonnummer erstellen -->
 <sql:update dataSource="${ds}">
     CREATE TABLE Telefonnummer (
-    SV_Nummer     VARCHAR2(50) NOT NULL,
+    SV_Nr     VARCHAR2(11) NOT NULL,
     Telefonnummer VARCHAR2(30) NOT NULL,
 
-    PRIMARY KEY (SV_Nummer, Telefonnummer),
-    FOREIGN KEY (SV_Nummer) REFERENCES Person(SVNR)
+    PRIMARY KEY (SV_Nr, Telefonnummer),
+    FOREIGN KEY (SV_Nr) REFERENCES Person(SV_Nr)
     )
 </sql:update>
 
+<!-- Tabelle Passagier erstellen -->
+<sql:update dataSource="${ds}">
+    CREATE TABLE Passagier (
+    SV_Nr VARCHAR2(11) PRIMARY KEY,
+    Passagier_Nr INT NOT NULL,
+
+    FOREIGN KEY (SV_Nr) REFERENCES Person(SV_Nr)
+    )
+</sql:update>
+
+
+<!-- Tabelle Bank erstellen -->
+<sql:update dataSource="${ds}">
+    CREATE TABLE Bank (
+    Bankleitzahl INT PRIMARY KEY,
+    Bankname VARCHAR2(30) NOT NULL
+    )
+</sql:update>
+
+<!-- Tabelle Angestellter erstellen -->
+<sql:update dataSource="${ds}">
+    CREATE TABLE Angestellter (
+    SV_Nr VARCHAR2(11) PRIMARY KEY,
+    Angestellten_Nr INT NOT NULL,
+    Konto_Nr INT NOT NULL,
+    Bankleitzahl INT NOT NULL,
+    Kontostand NUMBER(12, 2),
+
+    FOREIGN KEY (SV_Nr) REFERENCES Person(SV_Nr),
+    FOREIGN KEY (Bankleitzahl) REFERENCES Bank(Bankleitzahl),
+    UNIQUE (Konto_Nr, Bankleitzahl)
+    )
+</sql:update>
+
+<!-- Tabelle Kapitaen erstellen -->
+<sql:update dataSource="${ds}">
+    CREATE TABLE Kapitaen (
+    SV_Nr VARCHAR2(11) PRIMARY KEY,
+    Kapitaenspatent VARCHAR2(11) NOT NULL,
+    Seemeilen NUMBER(12, 2),
+
+    FOREIGN KEY (SV_Nr) REFERENCES Angestellter(SV_Nr)
+    )
+</sql:update>
 
 <p>Tabellen wurden erfolgreich erstellt!</p>
