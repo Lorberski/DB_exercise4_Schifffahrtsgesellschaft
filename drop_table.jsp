@@ -13,69 +13,60 @@
 
 
 <sql:update dataSource="${ds}">
-    BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE Kapitaen';
-    EXCEPTION
-    WHEN OTHERS THEN
-    IF SQLCODE != -942 THEN
-    RAISE;
-    END IF;
-    END;
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Ausleihberechtigter_entlehnen'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
 </sql:update>
 
 <sql:update dataSource="${ds}">
-    BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE Angestellter';
-    EXCEPTION
-    WHEN OTHERS THEN
-    IF SQLCODE != -942 THEN
-    RAISE;
-    END IF;
-    END;
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE wartet_ab'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
 </sql:update>
 
 <sql:update dataSource="${ds}">
-    BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE Telefonnummer';
-    EXCEPTION
-    WHEN OTHERS THEN
-    IF SQLCODE != -942 THEN
-    RAISE;
-    END IF;
-    END;
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Buchen'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
 </sql:update>
 
 <sql:update dataSource="${ds}">
-    BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE Passagier';
-    EXCEPTION
-    WHEN OTHERS THEN
-    IF SQLCODE != -942 THEN
-    RAISE;
-    END IF;
-    END;
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Schiff_Exemplar'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
 </sql:update>
 
 <sql:update dataSource="${ds}">
-    BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE Person';
-    EXCEPTION
-    WHEN OTHERS THEN
-    IF SQLCODE != -942 THEN
-    RAISE;
-    END IF;
-    END;
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Techniker'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
 </sql:update>
 
 <sql:update dataSource="${ds}">
-    BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE Bank';
-    EXCEPTION
-    WHEN OTHERS THEN
-    IF SQLCODE != -942 THEN
-    RAISE;
-    END IF;
-    END;
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Kapitaen'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
 </sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Angestellter'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+</sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Telefonnummer'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+</sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Passagier'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+</sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Passage'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+</sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Schiff_Typ'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+</sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Hersteller'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+</sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Bank'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+</sql:update>
+
+<sql:update dataSource="${ds}">
+    BEGIN EXECUTE IMMEDIATE 'DROP TABLE Person'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+</sql:update>
+
 
 <p>DROP TABLE successful!</p>
