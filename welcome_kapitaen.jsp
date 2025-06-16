@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <sql:setDataSource
         driver="oracle.jdbc.driver.OracleDriver"
         url="jdbc:oracle:thin:@localhost:1521/xepdb1"
@@ -13,87 +14,22 @@
 <head>
     <title>Willkommen Kapitän</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-        }
-        header {
-            background: #333;
-            color: #fff;
-            padding-top: 30px;
-            min-height: 70px;
-            border-bottom: #77A6F7 3px solid;
-        }
-        header a {
-            color: #fff;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 16px;
-        }
-        header ul {
-            padding: 0;
-            list-style: none;
-        }
-        header li {
-            float: left;
-            display: inline;
-            padding: 0 20px 0 20px;
-        }
-        header #branding {
-            float: left;
-        }
-        header #branding h1 {
-            margin: 0;
-        }
-        header nav {
-            float: right;
-            margin-top: 10px;
-        }
-        form {
-            background: #fff;
-            padding: 20px;
-            margin-top: 20px;
-            border: #77A6F7 1px solid;
-            border-radius: 5px;
-        }
-        form input[type="text"],
-        form input[type="submit"] {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        form input[type="submit"] {
-            background: #333;
-            color: #fff;
-            border: 0;
-            cursor: pointer;
-        }
-        form input[type="submit"]:hover {
-            background: #555;
-        }
-        .message {
-            padding: 10px;
-            margin-top: 20px;
-            border-radius: 5px;
-        }
-        .success {
-            background: #c8e6c9;
-            color: #2e7d32;
-            border: #2e7d32 1px solid;
-        }
-        .error {
-            background: #ffcdd2;
-            color: #c62828;
-            border: #c62828 1px solid;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .container { width: 80%; margin: auto; overflow: hidden; }
+        header { background: #333; color: #fff; padding-top: 30px; min-height: 70px; border-bottom: #77A6F7 3px solid; }
+        header a { color: #fff; text-decoration: none; text-transform: uppercase; font-size: 16px; }
+        header ul { padding: 0; list-style: none; }
+        header li { float: left; display: inline; padding: 0 20px; }
+        header #branding { float: left; }
+        header #branding h1 { margin: 0; }
+        header nav { float: right; margin-top: 10px; }
+        form { background: #fff; padding: 20px; margin-top: 20px; border: #77A6F7 1px solid; border-radius: 5px; }
+        form input[type="text"], form input[type="submit"] { display: block; width: 100%; padding: 10px; margin-bottom: 10px; }
+        form input[type="submit"] { background: #333; color: #fff; border: 0; cursor: pointer; }
+        form input[type="submit"]:hover { background: #555; }
+        .message { padding: 10px; margin-top: 20px; border-radius: 5px; }
+        .success { background: #c8e6c9; color: #2e7d32; border: #2e7d32 1px solid; }
+        .error { background: #ffcdd2; color: #c62828; border: #c62828 1px solid; }
     </style>
 </head>
 <body>
@@ -101,10 +37,15 @@
     <div class="container">
         <div id="branding">
             <h1>Willkommen Kapitän</h1>
+            <p style="color: #fff;">Angemeldet als Mitarbeiter:
+                <strong>
+                    <c:out value="${sessionScope.angestellten_nr}" />
+                </strong>
+            </p>
         </div>
         <nav>
             <ul>
-                <li><a href="index.html">Logout</a></li>
+                <li><a href="logout.jsp">Logout</a></li>
             </ul>
         </nav>
     </div>
@@ -140,8 +81,8 @@
                 <sql:update dataSource="${ds}" var="updateFahren">
                     INSERT INTO FAHREN (SVNR, PASSAGENNUMMER, TYPENNUMMER)
                     VALUES (?, ?, ?)
-                    <sql:param value="${sessionScope.SV_NR}" />
-                    <sql:param value="${param.passagen_nr}" />
+                    <sql:param value="${sessionScope.angestellten_nr}" />
+                    <sql:param value="${param.passagennummer}" />
                     <sql:param value="${param.typennummer}" />
                 </sql:update>
 
@@ -150,12 +91,12 @@
                         <div class="message success">Passage erfolgreich erstellt!</div>
                     </c:when>
                     <c:otherwise>
-                        <div class="message error">Fehler beim Einfügen in die Tabelle FAHREN. Bitte kontaktieren Sie den Administrator.</div>
+                        <div class="message error">Fehler beim Einfügen in die Tabelle FAHREN.</div>
                     </c:otherwise>
                 </c:choose>
             </c:when>
             <c:otherwise>
-                <div class="message error">Fehler beim Einfügen in die Tabelle PASSAGE. Bitte versuchen Sie es erneut.</div>
+                <div class="message error">Fehler beim Einfügen in die Tabelle PASSAGE.</div>
             </c:otherwise>
         </c:choose>
     </c:if>

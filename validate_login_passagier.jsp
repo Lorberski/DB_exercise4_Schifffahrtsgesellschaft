@@ -2,6 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%-- Debug-Ausgabe --%>
+<p>passagier_nr: ${param.passagier_nr}</p>
+<p>sv_nr: ${param.sv_nr}</p>
+
 <sql:setDataSource
         driver="oracle.jdbc.driver.OracleDriver"
         url="jdbc:oracle:thin:@localhost:1521/xepdb1"
@@ -10,38 +14,22 @@
         var="ds"
 />
 
-<!-- 1. Prüfen, ob der Angestellte existiert -->
-<sql:query dataSource="${ds}" var="angestellterResult">
-    SELECT * FROM ANGESTELLTER
-    WHERE SV_NR = ? AND ANGESTELLTEN_NR = ?
+<sql:query dataSource="${ds}" var="result">
+    SELECT * FROM Passagier WHERE PASSAGIER_NR = ? AND SV_NR = ?
+    <sql:param value="${param.passagier_nr}" />
     <sql:param value="${param.sv_nr}" />
-    <sql:param value="${param.angestellten_nr}" />
 </sql:query>
 
 <c:choose>
-    <c:when test="${not empty angestellterResult.rows}">
-        <c:set var="svNr" value="${param.sv_nr}" scope="session" />
-        <c:set var="angestelltenNr" value="${param.angestellten_nr}" scope="session" />
-
-        <!-- 2. Prüfen, ob der SV_NR auch Kapitaen ist -->
-        <sql:query dataSource="${ds}" var="kapitaenResult">
-            SELECT * FROM KAPITAEN WHERE SV_NR = ?
-            <sql:param value="${param.sv_nr}" />
-        </sql:query>
-
-        <c:choose>
-            <c:when test="${not empty kapitaenResult.rows}">
-                <!-- SV_NR ist Kapitaen -->
-                <c:redirect url="welcome_kapitaen.jsp" />
-            </c:when>
-            <c:otherwise>
-                <!-- SV_NR ist Angestellter, aber kein Kapitaen -->
-                <c:redirect url="welcome_angestellte.jsp" />
-            </c:otherwise>
-        </c:choose>
+    <c:when test="${not empty result.rows}">
+        <%-- Session setzen (Java-Code, falls nötig) --%>
+        <%
+            String passagierNr = request.getParameter("passagier_nr");
+            session.setAttribute("passagiernummer", passagierNr);
+        %>
+        <c:redirect url="welcome_passagier.jsp" />
     </c:when>
     <c:otherwise>
-        <!-- Kein Angestellter mit dieser SV_NR und Angestellten_NR -->
-        <c:redirect url="login_mitarbeiter.jsp?error=true" />
+        <c:redirect url="login_passagiere.jsp?error=true" />
     </c:otherwise>
 </c:choose>

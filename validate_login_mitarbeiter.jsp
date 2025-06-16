@@ -20,10 +20,11 @@
 
 <c:choose>
     <c:when test="${not empty angestellterResult.rows}">
-        <c:set var="svNr" value="${param.sv_nr}" scope="session" />
-        <c:set var="angestelltenNr" value="${param.angestellten_nr}" scope="session" />
+        <!-- Speichern in Session -->
+        <c:set var="angestellten_nr" value="${param.angestellten_nr}" scope="session" />
+        <c:set var="sv_nr" value="${param.sv_nr}" scope="session" />
 
-        <!-- 2. Prüfen, ob der SV_NR auch Kapitaen ist -->
+        <!-- 2. Prüfen, ob der SV_NR auch Kapitän ist -->
         <sql:query dataSource="${ds}" var="kapitaenResult">
             SELECT * FROM KAPITAEN WHERE SV_NR = ?
             <sql:param value="${param.sv_nr}" />
@@ -31,17 +32,17 @@
 
         <c:choose>
             <c:when test="${not empty kapitaenResult.rows}">
-                <!-- SV_NR ist Kapitaen -->
+                <!-- SV_NR ist Kapitän -->
                 <c:redirect url="welcome_kapitaen.jsp" />
             </c:when>
             <c:otherwise>
-                <!-- SV_NR ist Angestellter, aber kein Kapitaen -->
+                <!-- SV_NR ist Angestellter, aber kein Kapitän -->
                 <c:redirect url="welcome_angestellte.jsp" />
             </c:otherwise>
         </c:choose>
     </c:when>
     <c:otherwise>
-        <!-- Kein Angestellter mit dieser SV_NR und Angestellten_NR -->
+        <!-- Kein Angestellter mit dieser SV_NR und ANGESTELLTEN_NR -->
         <c:redirect url="login_mitarbeiter.jsp?error=true" />
     </c:otherwise>
 </c:choose>
