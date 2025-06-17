@@ -181,6 +181,8 @@ FOREIGN KEY (SV_Nr) REFERENCES Angestellter(SV_Nr)
     Passagen_Nr INT,
     Typennummer INT,
 
+    PRIMARY KEY (SV_Nr, Passagen_Nr, Typennummer),
+
     FOREIGN KEY (Passagen_Nr) REFERENCES Passage(Passagen_Nr),
     FOREIGN KEY (SV_Nr) REFERENCES Kapitaen(SV_Nr),
     FOREIGN KEY (Typennummer) REFERENCES Schiff_Typ(Typennummer)

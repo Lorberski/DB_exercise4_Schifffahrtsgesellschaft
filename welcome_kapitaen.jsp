@@ -9,6 +9,13 @@
         password="noo2toh5Ot"
         var="ds"
 />
+<sql:query var="angestellterInfo" dataSource="${ds}">
+    SELECT p.vorname, p.nachname, a.sv_nr
+    FROM Angestellter a
+    JOIN Person p ON a.sv_nr = p.sv_nr
+    WHERE a.angestellten_nr = ?
+    <sql:param value="${sessionScope.angestellten_nr}" />
+</sql:query>
 
 <html>
 <head>
@@ -36,13 +43,18 @@
 <header>
     <div class="container">
         <div id="branding">
-            <h1>Willkommen Kapitän</h1>
-            <p style="color: #fff;">Angemeldet als Mitarbeiter:
-                <strong>
-                    <c:out value="${sessionScope.angestellten_nr}" />
-                </strong>
-            </p>
         </div>
+	    <h1>Willkommen Kapitän</h1>
+		<p>Name: 
+		  <strong>
+		    <c:out value="${angestellterInfo.rows[0].vorname}" />
+		    <c:out value=" " />
+		    <c:out value="${angestellterInfo.rows[0].nachname}" />
+		  </strong>
+		</p>
+	    <p style="color: #fff;">Angemeldet als Mitarbeiter:
+   	<strong><c:out value="${sessionScope.angestellten_nr}" /></strong>
+	</p>
         <nav>
             <ul>
                 <li><a href="logout.jsp">Logout</a></li>
@@ -85,7 +97,7 @@
                 <sql:update dataSource="${ds}" var="updateFahren">
                     INSERT INTO FAHREN (SV_NR, PASSAGEN_NR, TYPENNUMMER)
                     VALUES (?, ?, ?)
-                    <sql:param value="${sessionScope.angestellten_nr}" />
+                    <sql:param value="${angestellterInfo.rows[0].sv_nr}" />
                     <sql:param value="${param.passagennummer}" />
                     <sql:param value="${param.typennummer}" />
                 </sql:update>
