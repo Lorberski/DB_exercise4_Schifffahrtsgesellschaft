@@ -9,12 +9,39 @@
         password="noo2toh5Ot"
         var="ds"
 />
+
+<!-- Mitarbeiterinformationen abrufen -->
 <sql:query var="angestellterInfo" dataSource="${ds}">
     SELECT p.vorname, p.nachname, a.sv_nr
     FROM Angestellter a
     JOIN Person p ON a.sv_nr = p.sv_nr
     WHERE a.angestellten_nr = ?
     <sql:param value="${sessionScope.angestellten_nr}" />
+</sql:query>
+
+<!-- Wenn delete_id gesetzt ist, Passage löschen -->
+<c:if test="${not empty param.delete_id}">
+    <sql:update dataSource="${ds}" var="delFahren">
+        DELETE FROM FAHREN WHERE PASSAGEN_NR = ?
+        <sql:param value="${param.delete_id}" />
+    </sql:update>
+    <sql:update dataSource="${ds}" var="delPassage">
+        DELETE FROM PASSAGE WHERE PASSAGEN_NR = ?
+        <sql:param value="${param.delete_id}" />
+    </sql:update>
+    <c:redirect url="welcome_kapitaen.jsp" />
+</c:if>
+
+<!-- Alle Passagen dieses Kapitäns abrufen -->
+<sql:query dataSource="${ds}" var="kapitaenPassagen">
+    SELECT pa.PASSAGEN_NR, pa.ABFAHRTSHAFEN, pa.ZIELHAFEN,
+    TO_CHAR(pa.ABFAHRTSZEIT, 'YYYY-MM-DD HH24:MI:SS') AS ABFAHRTSZEIT,
+    TO_CHAR(pa.ANKUNFTSZEIT, 'YYYY-MM-DD HH24:MI:SS') AS ANKUNFTSZEIT,
+    f.TYPENNUMMER
+    FROM PASSAGE pa
+    JOIN FAHREN f ON pa.PASSAGEN_NR = f.PASSAGEN_NR
+    WHERE f.SV_NR = ?
+    <sql:param value="${angestellterInfo.rows[0].sv_nr}" />
 </sql:query>
 
 <html>
@@ -30,7 +57,7 @@
         header #branding { float: left; }
         header #branding h1 { margin: 0; }
         header nav { float: right; margin-top: 10px; }
-        form { background: #fff; padding: 20px; margin-top: 20px; border: #77A6F7 1px solid; border-radius: 5px; }
+        form, table { background: #fff; padding: 20px; margin-top: 20px; border: #77A6F7 1px solid; border-radius: 5px; }
         form input[type="text"], form input[type="submit"] { display: block; width: 100%; padding: 10px; margin-bottom: 10px; }
         form input[type="submit"] { background: #333; color: #fff; border: 0; cursor: pointer; }
         form input[type="submit"]:hover { background: #555; }
@@ -42,19 +69,17 @@
 <body>
 <header>
     <div class="container">
-        <div id="branding">
-        </div>
-	    <h1>Willkommen Kapitän</h1>
-		<p>Name: 
-		  <strong>
-		    <c:out value="${angestellterInfo.rows[0].vorname}" />
-		    <c:out value=" " />
-		    <c:out value="${angestellterInfo.rows[0].nachname}" />
-		  </strong>
-		</p>
-	    <p style="color: #fff;">Angemeldet als Mitarbeiter:
-   	<strong><c:out value="${sessionScope.angestellten_nr}" /></strong>
-	</p>
+        <h1>Willkommen Kapitän</h1>
+        <p>Name:
+            <strong>
+                <c:out value="${angestellterInfo.rows[0].vorname}" />
+                <c:out value=" " />
+                <c:out value="${angestellterInfo.rows[0].nachname}" />
+            </strong>
+        </p>
+        <p style="color: #fff;">Angemeldet als Mitarbeiter:
+            <strong><c:out value="${sessionScope.angestellten_nr}" /></strong>
+        </p>
         <nav>
             <ul>
                 <li><a href="logout.jsp">Logout</a></li>
@@ -66,24 +91,20 @@
 <div class="container">
     <h2>Passage erstellen</h2>
     <form action="welcome_kapitaen.jsp" method="post">
-        Passagennummer: <input type="text" name="passagennummer" required/><br />
-        Abfahrtshafen: <input type="text" name="abfahrtshafen" required/><br />
-        Zielhafen: <input type="text" name="zielhafen" required/><br />
-        Abfahrtszeit: <input type="text" name="abfahrtszeit" required/><br />
-        Ankunftszeit: <input type="text" name="ankunftszeit" required/><br />
-        Schiffstyp-Nummer: <input type="text" name="typennummer" required/><br />
+        Passagennummer: <input type="text" name="passagennummer" required/>
+        Abfahrtshafen: <input type="text" name="abfahrtshafen" required/>
+        Zielhafen: <input type="text" name="zielhafen" required/>
+        Abfahrtszeit (YYYY-MM-DD HH24:MI:SS): <input type="text" name="abfahrtszeit" required/>
+        Ankunftszeit (YYYY-MM-DD HH24:MI:SS): <input type="text" name="ankunftszeit" required/>
+        Schiffstyp-Nummer: <input type="text" name="typennummer" required/>
         <input type="submit" value="Passage speichern" />
     </form>
 
+    <!-- Wenn alle Felder gesetzt sind: Passage einfügen -->
     <c:if test="${not empty param.passagennummer and not empty param.abfahrtshafen and not empty param.zielhafen and not empty param.abfahrtszeit and not empty param.ankunftszeit and not empty param.typennummer}">
-        <!-- Einfügen in die Tabelle PASSAGE -->
         <sql:update dataSource="${ds}" var="updatePassage">
             INSERT INTO PASSAGE (PASSAGEN_NR, ABFAHRTSHAFEN, ZIELHAFEN, ABFAHRTSZEIT, ANKUNFTSZEIT)
-            VALUES (
-            ?, ?, ?,
-            TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'),
-            TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS')
-            )
+            VALUES (?, ?, ?, TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'))
             <sql:param value="${param.passagennummer}" />
             <sql:param value="${param.abfahrtshafen}" />
             <sql:param value="${param.zielhafen}" />
@@ -93,7 +114,6 @@
 
         <c:choose>
             <c:when test="${updatePassage >= 1}">
-                <!-- Automatisches Einfügen in die Tabelle FAHREN -->
                 <sql:update dataSource="${ds}" var="updateFahren">
                     INSERT INTO FAHREN (SV_NR, PASSAGEN_NR, TYPENNUMMER)
                     VALUES (?, ?, ?)
@@ -104,8 +124,9 @@
 
                 <c:choose>
                     <c:when test="${updateFahren >= 1}">
-                        <div class="message success">Passage erfolgreich erstellt!</div>
+                        <c:redirect url="welcome_kapitaen.jsp" />
                     </c:when>
+
                     <c:otherwise>
                         <div class="message error">Fehler beim Einfügen in die Tabelle FAHREN.</div>
                     </c:otherwise>
@@ -116,6 +137,35 @@
             </c:otherwise>
         </c:choose>
     </c:if>
+
+    <h2>Meine Passagen</h2>
+    <table border="1" cellpadding="5" cellspacing="0" style="background: #fff; border-collapse: collapse; width: 100%;">
+        <tr style="background: #333; color: #fff;">
+            <th>Passagennr</th>
+            <th>Abfahrtshafen</th>
+            <th>Zielhafen</th>
+            <th>Abfahrtszeit</th>
+            <th>Ankunftszeit</th>
+            <th>Schiffstyp</th>
+            <th>Aktion</th>
+        </tr>
+        <c:forEach var="row" items="${kapitaenPassagen.rows}">
+            <tr>
+                <td><c:out value="${row.PASSAGEN_NR}" /></td>
+                <td><c:out value="${row.ABFAHRTSHAFEN}" /></td>
+                <td><c:out value="${row.ZIELHAFEN}" /></td>
+                <td><c:out value="${row.ABFAHRTSZEIT}" /></td>
+                <td><c:out value="${row.ANKUNFTSZEIT}" /></td>
+                <td><c:out value="${row.TYPENNUMMER}" /></td>
+                <td>
+                    <form method="post" action="welcome_kapitaen.jsp" style="margin:0;">
+                        <input type="hidden" name="delete_id" value="${row.PASSAGEN_NR}" />
+                        <input type="submit" value="Löschen" onclick="return confirm('Wirklich löschen?');" />
+                    </form>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
 </body>
 </html>
