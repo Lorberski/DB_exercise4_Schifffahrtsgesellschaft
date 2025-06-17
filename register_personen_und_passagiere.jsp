@@ -1,105 +1,157 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Register - Schiffahrtsgesellschaft</title>
+    <title>Registrierung | Schifffahrtsgesellschaft</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background-color: #00695c;
+        }
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: bold;
+        }
+        .register-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffffcc;
+        }
+        .card-title {
+            text-align: center;
+            color: #004d40;
+            margin-bottom: 1.5rem;
+        }
+        .btn-primary {
+            background-color: #00796b;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #004d40;
+        }
+        .text-danger {
+            margin-top: 1rem;
+        }
+    </style>
+
     <script>
         function validateForm() {
-            var letterPattern = /^[a-zA-Z]+$/;
-            var numberPattern = /^[0-9]+$/;
-            var alphanumericPattern = /^[0-9A-Za-z]+$/;
+            const letterPattern = /^[a-zA-ZäöüÄÖÜß]+$/;
+            const numberPattern = /^[0-9]+$/;
+            const alphanumericPattern = /^[0-9A-Za-z]+$/;
 
-            var svnr = document.getElementById('svnr').value;
-            var vorname = document.getElementById('vorname').value;
-            var nachname = document.getElementById('nachname').value;
-            var ort = document.getElementById('ort').value;
-            var strasse = document.getElementById('strasse').value;
-            var postleitzahl = document.getElementById('postleitzahl').value;
-            var hausnummer = document.getElementById('hausnummer').value;
+            const fields = {
+                svnr: { pattern: numberPattern, message: "SVNR darf nur Zahlen enthalten." },
+                vorname: { pattern: letterPattern, message: "Vorname darf nur Buchstaben enthalten." },
+                nachname: { pattern: letterPattern, message: "Nachname darf nur Buchstaben enthalten." },
+                ort: { pattern: letterPattern, message: "Ort darf nur Buchstaben enthalten." },
+                strasse: { pattern: letterPattern, message: "Straße darf nur Buchstaben enthalten." },
+                postleitzahl: { pattern: numberPattern, message: "Postleitzahl darf nur Zahlen enthalten." },
+                hausnummer: { pattern: alphanumericPattern, message: "Hausnummer darf nur Zahlen und Buchstaben enthalten." }
+            };
 
-            if (!numberPattern.test(svnr)) {
-                alert("SVNR must contain only numbers.");
-                return false;
+            for (const [id, rule] of Object.entries(fields)) {
+                const value = document.getElementById(id).value.trim();
+                if (!rule.pattern.test(value)) {
+                    alert(rule.message);
+                    return false;
+                }
             }
-            if (!letterPattern.test(vorname)) {
-                alert("First Name must contain only letters.");
-                return false;
-            }
-            if (!letterPattern.test(nachname)) {
-                alert("Last Name must contain only letters.");
-                return false;
-            }
-            if (!letterPattern.test(ort)) {
-                alert("City must contain only letters.");
-                return false;
-            }
-            if (!letterPattern.test(strasse)) {
-                alert("Street must contain only letters.");
-                return false;
-            }
-            if (!numberPattern.test(postleitzahl)) {
-                alert("Postal Code must contain only numbers.");
-                return false;
-            }
-            if (!alphanumericPattern.test(hausnummer)) {
-                alert("House Number must contain numbers or letters.");
-                return false;
-            }
+
             return true;
         }
     </script>
 </head>
 <body>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2 class="text-center">Register</h2>
-            <form action="validate_register_personen_und_passagier.jsp" method="post" onsubmit="return validateForm();">
-                <div class="form-group">
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Schifffahrtsgesellschaft der Gruppe 4</a>
+    </div>
+</nav>
+
+<div class="register-container">
+    <div class="card">
+        <h2 class="card-title">Registrierung</h2>
+        <form action="validate_register_personen_und_passagier.jsp" method="post" onsubmit="return validateForm();">
+            <div class="form-row">
+                <div class="form-group col-md-6">
                     <label for="svnr">SVNR</label>
-                    <input type="text" class="form-control" id="svnr" name="svnr" required pattern="\d+" title="SVNR must contain only numbers.">
+                    <input type="text" class="form-control" id="svnr" name="svnr" required>
                 </div>
-                <div class="form-group">
-                    <label for="vorname">First Name</label>
-                    <input type="text" class="form-control" id="vorname" name="vorname" required pattern="[A-Za-z]+" title="First Name must contain only letters.">
+                <div class="form-group col-md-6">
+                    <label for="hausnummer">Hausnummer</label>
+                    <input type="text" class="form-control" id="hausnummer" name="hausnummer" required>
                 </div>
-                <div class="form-group">
-                    <label for="nachname">Last Name</label>
-                    <input type="text" class="form-control" id="nachname" name="nachname" required pattern="[A-Za-z]+" title="Last Name must contain only letters.">
+            </div>
+            <div class="form-group">
+                <label for="vorname">Vorname</label>
+                <input type="text" class="form-control" id="vorname" name="vorname" required>
+            </div>
+            <div class="form-group">
+                <label for="nachname">Nachname</label>
+                <input type="text" class="form-control" id="nachname" name="nachname" required>
+            </div>
+            <div class="form-group">
+                <label for="ort">Ort</label>
+                <input type="text" class="form-control" id="ort" name="ort" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-8">
+                    <label for="strasse">Straße</label>
+                    <input type="text" class="form-control" id="strasse" name="strasse" required>
                 </div>
-                <div class="form-group">
-                    <label for="ort">City</label>
-                    <input type="text" class="form-control" id="ort" name="ort" required pattern="[A-Za-z]+" title="City must contain only letters.">
+                <div class="form-group col-md-4">
+                    <label for="postleitzahl">PLZ</label>
+                    <input type="text" class="form-control" id="postleitzahl" name="postleitzahl" required>
                 </div>
-                <div class="form-group">
-                    <label for="strasse">Street</label>
-                    <input type="text" class="form-control" id="strasse" name="strasse" required pattern="[A-Za-z]+" title="Street must contain only letters.">
-                </div>
-                <div class="form-group">
-                    <label for="postleitzahl">Postal Code</label>
-                    <input type="text" class="form-control" id="postleitzahl" name="postleitzahl" required pattern="\d+" title="Postal Code must contain only numbers.">
-                </div>
-                <div class="form-group">
-                    <label for="hausnummer">House Number</label>
-                    <input type="text" class="form-control" id="hausnummer" name="hausnummer" required pattern="[0-9A-Za-z]+" title="House Number must contain numbers or letters.">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
-            </form>
-            <c:if test="${param.error != null}">
-                <p class="text-danger text-center">Registration failed. Please try again.</p>
-            </c:if>
-        </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Registrieren</button>
+        </form>
+
+        <c:if test="${param.error != null}">
+            <p class="text-danger text-center">Registrierung fehlgeschlagen. Bitte erneut versuchen.</p>
+        </c:if>
     </div>
 </div>
 
+<!-- Erfolgreiche Registrierung &#8594; Weiterleitung -->
 <c:if test="${not empty param.successPassagiernummer}">
     <script>
-        alert("Your Passagiernummer is: ${param.successPassagiernummer}");
+        alert("Ihre Passagiernummer lautet: ${param.successPassagiernummer}");
         window.location.href = 'login_passagiere.jsp';
     </script>
 </c:if>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>

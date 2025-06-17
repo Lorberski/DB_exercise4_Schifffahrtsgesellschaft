@@ -1,79 +1,85 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Willkommen Passagier</title>
+    <title>Willkommen Passagier | Schifffahrtsgesellschaft</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
-            background-color: #f8f9fa;
-        }
-        header {
-            background: #333;
-            color: #fff;
-            padding-top: 30px;
-            min-height: 70px;
-            border-bottom: #77A6F7 3px solid;
-        }
-        header a {
-            color: #fff;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 16px;
-        }
-        header ul {
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
             padding: 0;
-            list-style: none;
-            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        header li {
-            float: left;
-            display: inline;
-            padding: 0 20px;
+        .navbar {
+            background-color: #00695c;
         }
-        header #branding {
-            float: left;
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: bold;
         }
-        header #branding h1 {
-            margin: 0;
+        .welcome-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
         }
-        header nav {
-            float: right;
-            margin-top: 10px;
+        .card {
+            background-color: #ffffffcc;
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
         }
-        .welcome-card {
-            margin-top: 100px;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        .card h2 {
+            color: #004d40;
+            margin-bottom: 1rem;
         }
-        .welcome-card h2 {
-            font-size: 2rem;
+        .card p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+        .card h4 {
+            color: #00796b;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-<header>
-    <div class="container clearfix">
-        <div id="branding">
-            <h1>Willkommen Passagier</h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="logout.jsp">Logout</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
 
-<div class="container d-flex justify-content-center">
-    <div class="welcome-card bg-white text-center col-md-6">
-        <h2 class="mb-4">Willkommen, Passagier!</h2>
-        <p class="lead">Ihre Passagiernummer ist:</p>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Schifffahrtsgesellschaft der Gruppe 4</a>
+        <div class="ml-auto">
+            <a href="logout.jsp" class="btn btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="welcome-container">
+    <div class="card">
+        <h2>Willkommen, Passagier!</h2>
+        <p class="lead">Ihre Passagiernummer lautet:</p>
         <h4><c:out value="${sessionScope.passagiernummer}" /></h4>
     </div>
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>
